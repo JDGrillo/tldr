@@ -7,6 +7,7 @@ import (
 	"github.com/JesusIslam/tldr"
 	"log"
 	"net/http"
+	"math"
 )
 
 type test_struct struct {
@@ -29,8 +30,6 @@ func home(w http.ResponseWriter, r *http.Request) {
 		bodyResponse := t.Article_Body
 		originalWordNum := numberOfWords(bodyResponse)
 		intoSentences := originalWordNum / 100
-		fmt.Println(originalWordNum)
-		fmt.Println(intoSentences)
 		bag := tldr.New()
 		result, _ := bag.Summarize(bodyResponse, intoSentences)
 		concatenatedString := ""
@@ -39,7 +38,8 @@ func home(w http.ResponseWriter, r *http.Request) {
 		}
 		newWordNum := numberOfWords(concatenatedString)
 		wordDifference := originalWordNum - newWordNum
-		formattedString := fmt.Sprintf(`{"message": "%s","words_removed": %d}`, concatenatedString, wordDifference)
+		percentageRemoved := math.Round((float64(wordDifference) / float64(originalWordNum)) * 100.0)
+		formattedString := fmt.Sprintf(`{"message": "%s","words_removed": %d, "percentage_removed": %f}`, concatenatedString, wordDifference, percentageRemoved)
 		w.Write([]byte(formattedString))
     default:
         w.WriteHeader(http.StatusNotFound)
