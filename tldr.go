@@ -283,16 +283,6 @@ type Node struct {
 	sentenceIndex int   // index of sentence from the bag
 	vector        []int // map of word count in respect with dict, should we use map instead of slice?
 	// for example :
-	/*
-		dict = {
-			i : 1
-			am : 2
-			the : 3
-			shit : 4
-		}
-		str = "I am not shit, you effin shit"
-		vector = [1, 1, 0, 2] => [1, 1, 0, 1] because should be binary
-	*/
 }
 
 func (bag *Bag) createNodes() {
